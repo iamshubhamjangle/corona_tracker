@@ -17,7 +17,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
     Button btn_sync;
     TextView textView;
-    Boolean errorFlag = Boolean.FALSE;
+    int active, delActive, discharged, delDischarged, death, delDeath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +30,19 @@ public class MainActivity extends AppCompatActivity {
         btn_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                boolean flag = getWebsite();
-                if(flag==Boolean.TRUE){
-                    splitTheText();
-                }
-
+                Log.d("Mytag", "Button Clicked");
+                getWebsite();
+                splitTheText();
             }
         });
 
 
+
+
     }
-    private boolean getWebsite() {
-        Log.d("Mytag", "Get Website text here");
+
+    private void getWebsite() {
+        Log.d("Mytag", "Get Website Processing started");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
                     for (Element row : document.select("div.col-xs-8.site-stats-count")) {
                         builder.append(row.select("span.mob-show strong").text());
                     }
-                    errorFlag = Boolean.TRUE;
                 }catch (IOException e){
                     builder.append("Error : ").append(e.getMessage()).append("\n");
                 }
@@ -61,16 +60,22 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        textView.setText(builder);
                     }
                 });
             }
         }).start();
-        return errorFlag;
     }
 
-
     private void splitTheText() {
-        Log.d("Mytag", "Splitted text here");
+        Log.d("Mytag", "Split the text started");
+        String[] casesDataArr = textView.getText().toString().split(" ");
+
+        active = Integer.parseInt(casesDataArr[0]);
+        delActive = Integer.parseInt(casesDataArr[1].substring(1, casesDataArr[1].length()-1));
+        discharged = Integer.parseInt(casesDataArr[2]);
+        delDischarged = Integer.parseInt(casesDataArr[3].substring(1, casesDataArr[3].length()-1));
+        death = Integer.parseInt(casesDataArr[4]);
+        delDeath = Integer.parseInt(casesDataArr[5].substring(1, casesDataArr[5].length()-1));
+
     }
 }
