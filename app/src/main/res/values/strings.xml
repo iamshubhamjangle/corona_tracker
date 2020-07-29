@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Corona Tracker</string>
     <string name="web_url">https://www.mohfw.gov.in/</string>
+    <string name="chartTitle">Corona Cases in India</string>
+    <string name="textViewValue">1000 1000 1000 1000 1000 1000</string>
+    <string name="chart_label">label</string>
+    <string name="chart_desc">Corona Cases in India</string>
 </resources>
