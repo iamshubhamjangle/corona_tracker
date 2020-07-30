@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
             textViewDelActive, textViewDelRecovered, textViewDelDeath;
     String[] casesDataArray;
     String active, delActive, recovered, delrecovered, death, delDeath;
+    Boolean flag = Boolean.FALSE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +36,12 @@ public class MainActivity extends AppCompatActivity {
         textViewDeath = findViewById(R.id.textViewDeath);
         textViewDelDeath = findViewById(R.id.textViewDelDeath);
 
+        getWebsite();
+
         btn_sync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getWebsite();
-
             }
         });
 
@@ -57,9 +59,10 @@ public class MainActivity extends AppCompatActivity {
                     for (Element row : document.select("div.col-xs-8.site-stats-count")) {
                         builder.append(row.select("span.mob-show strong").text());
                     }
+                    flag = Boolean.TRUE;
                 }catch (IOException e){
-                    builder.append("Error : ").append(e.getMessage()).append("\n");
-                    textView.setVisibility(View.VISIBLE);
+                    //builder.append("Error : ").append(e.getMessage()).append("\n");
+                    builder.append(getString(R.string.connectionError));
                 }
 
                 runOnUiThread(new Runnable() {
@@ -67,16 +70,19 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         //Split the text to array
                         textView.setText(builder);
-                        casesDataArray = textView.getText().toString().split(" ");
 
-                        Log.d("Mytag", "cases data array");
-                        for(int i=0; i< casesDataArray.length; i++){
-                            Log.d("Mytag", casesDataArray[i]);
+//                        Log.d("Mytag", "cases data array");
+//                        for(int i=0; i< casesDataArray.length; i++){
+//                            Log.d("Mytag", casesDataArray[i]);
+//                        }
+                        if(flag == Boolean.TRUE) {
+                            textView.setVisibility(View.INVISIBLE);
+                            casesDataArray = textView.getText().toString().split(" ");
+                            getData();
+                            setData();
+                        }else{
+                            textView.setVisibility(View.VISIBLE);
                         }
-
-                        getData();
-                        setData();
-
                     }
                 });
             }

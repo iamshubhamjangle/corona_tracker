@@ -7,4 +7,5 @@
     <string name="death">Death</string>
     <string name="amount">0</string>
     <string name="delamount">+0</string>
+    <string name="connectionError">Error in retrieving information from server\nPlease contact developer</string>
 </resources>
