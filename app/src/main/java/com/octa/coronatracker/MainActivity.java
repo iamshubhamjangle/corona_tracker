@@ -3,8 +3,10 @@ package com.octa.coronatracker;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.jsoup.Jsoup;
@@ -12,14 +14,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    Button btn_sync;
-    TextView textView, textViewActive, textViewDeath, textViewRecovered,
+    TextView textView, textViewActive, textViewDeath, textViewRecovered, textViewTotal,
             textViewDelActive, textViewDelRecovered, textViewDelDeath;
     String[] casesDataArray;
-    String active, delActive, recovered, delrecovered, death, delDeath;
+    int active, delActive, recovered, delRecovered, death, delDeath, total;
     Boolean flag = Boolean.FALSE;
 
     @Override
@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn_sync = findViewById(R.id.btn_sync);
         textView = findViewById(R.id.tvTitle);
         textViewActive = findViewById(R.id.textViewActive);
         textViewDelActive = findViewById(R.id.textViewDelActive);
@@ -35,15 +34,9 @@ public class MainActivity extends AppCompatActivity {
         textViewDelRecovered = findViewById(R.id.textViewDelRecovered);
         textViewDeath = findViewById(R.id.textViewDeath);
         textViewDelDeath = findViewById(R.id.textViewDelDeath);
+        textViewTotal = findViewById(R.id.textViewTotal);
 
         getWebsite();
-
-        btn_sync.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getWebsite();
-            }
-        });
 
     }
 
@@ -90,20 +83,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        active = casesDataArray[0];
-        delActive = casesDataArray[1].substring(1, casesDataArray[1].length()-1);
-        recovered = casesDataArray[2];
-        delrecovered = casesDataArray[3].substring(1, casesDataArray[3].length()-1);
-        death = casesDataArray[4];
-        delDeath = casesDataArray[5].substring(1, casesDataArray[5].length()-1);
+        active = Integer.parseInt(casesDataArray[0]);
+        delActive = Integer.parseInt(casesDataArray[1].substring(1, casesDataArray[1].length()-1));
+        recovered = Integer.parseInt(casesDataArray[2]);
+        delRecovered = Integer.parseInt(casesDataArray[3].substring(1, casesDataArray[3].length()-1));
+        death = Integer.parseInt(casesDataArray[4]);
+        delDeath = Integer.parseInt(casesDataArray[5].substring(1, casesDataArray[5].length()-1));
+        total = active + recovered + death;
     }
 
     private void setData() {
-        textViewActive.setText(active);
+        textViewActive.setText("" + active);
         textViewDelActive.setText("+" + delActive);
-        textViewRecovered.setText(recovered);
-        textViewDelRecovered.setText("+" + delrecovered);
-        textViewDeath.setText(death);
+        textViewRecovered.setText("" + recovered);
+        textViewDelRecovered.setText("+" + delRecovered);
+        textViewDeath.setText("" + death);
         textViewDelDeath.setText("+" + delDeath);
+        textViewTotal.setText("" + total);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_sync:
+                getWebsite();
+                return true;
+            case R.id.action_about:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
