@@ -5,3 +5,4 @@ Feel free to improve the app for more countries and displaying more information.
 
 As of now i have attached this .gif to showcase working of the app.
 
+![2020_07_30_18_41_07 Trim ConvGif](https://user-images.githubusercontent.com/65165548/88928004-e90b1880-d295-11ea-9961-8dcd4e4bc524.gif)
